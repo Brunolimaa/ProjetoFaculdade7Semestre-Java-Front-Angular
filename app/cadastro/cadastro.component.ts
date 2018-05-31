@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { Http, Headers } from '@angular/http';
 import { AlunoComponent } from '../aluno/aluno.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CadastroService } from './cadastro.service';
+import { ProfessorComponent } from '../professor/professor.component';
 
 @Component({
     moduleId: module.id,
@@ -12,80 +13,74 @@ export class CadastroComponent {
 
     alunos: Object[] = [];
     cadAluno: AlunoComponent = new AlunoComponent();
-    http: Http;
+    professores: Object[] = [];
     route: ActivatedRoute;
     mensagem: string = '';
     idAluno: string ;
     router: Router;
+    service: CadastroService;
 
-    constructor(http: Http, route: ActivatedRoute, router: Router) {
+    constructor(service: CadastroService, route: ActivatedRoute, router: Router) {
+        this.service = service;
         this.route = route;
         this.router = router;
-        this.http = http;
         this.carregar();
 
         this.route.params.subscribe(params => {
             let id = params['id'];
             this.idAluno = id;
-           // console.log(id);
             if(id){
-                this.http.get('http://localhost:8080/alunos/'+id)
+                this.service.listaId(id)
                 .subscribe(resp => {
                    console.log(resp);
                    this.cadAluno = resp.json();
                 });
             }
         });
-    }
 
-    // alterar(){
-    //     let header = new Headers();
-    //     header.append('Content-Type', 'application/json')
-    //     this.http.put('http://localhost:8080/alunos/'+1, JSON.stringify(this.cadAluno), {headers: header})
-    // }
+        service.listaProfessores()
+        .subscribe(res => {
+            console.log(res.json());
+            this.professores = res.json();
+        })
+    }
 
     cadastrar(event){
         event.preventDefault();
-        
         
         console.log(JSON.stringify(this.cadAluno));
         let header = new Headers();
         header.append('Content-Type', 'application/json')
 
         if(this.idAluno){
-            console.log(this.idAluno);
-            this.http.put('http://localhost:8080/alunos/'+this.idAluno, JSON.stringify(this.cadAluno), {headers: header})
-            .subscribe( () => {
+            this.service.alterar(this.idAluno, this.cadAluno)
+            .subscribe(() => {
                 this.carregar();
+                console.log(this.cadAluno);
                 this.mensagem = 'Alterado com sucesso!';
                 this.router.navigate(['']);
             })
         } else {
-            this.http.post('http://localhost:8080/alunos', JSON.stringify(this.cadAluno), { headers : header} )
-            .subscribe( () => {
-               // this.cadAluno = null;
+            this.service.cadastra(this.cadAluno)
+            .subscribe(() => {
                 this.carregar();
                 this.mensagem = 'Cadastrado com sucesso!';
-
-            }, error => console.log(error))
-            //console.log(this.alunos);
+                this.cadAluno = new AlunoComponent; 
+            })
         }
-
-
     }
 
     carregar() {
-        this.http.get('http://localhost:8080/alunos')
-        .subscribe(res => {
-            this.alunos = res.json();
-            console.log(this.alunos);
+        this.service.lista().subscribe(res => {
+                      this.alunos = res.json();
+            console.log(this.alunos);  
         })
     }
 
     remove(alunos: AlunoComponent) {
         console.log("Chamou aqui" + alunos.nome);
 
-        this.http.delete('http://localhost:8080/alunos/'+alunos.id)
+        this.service.remove(alunos.id)
         .subscribe(
             ()=> {
                 let novosAlunos = this.alunos.slice(0);
@@ -94,7 +89,6 @@ export class CadastroComponent {
                 this.alunos = novosAlunos;
                 
                 this.mensagem = "Aluno "+ alunos.nome +" removido com sucesso!";
-               // this.carregar();
             } ,
             erro => console.log(erro)
         );
@@ -102,18 +96,4 @@ export class CadastroComponent {
         console.log(alunos.id);
     }
 
-   /* cadastrar(event) {
-        event.preventDefault();
-
-        let header = new Headers();
-        header.append('Content-Type', 'application/json')
-
-        this.http.post('v1/fotos', JSON.stringify(this.foto), { headers : header} )
-        .subscribe( () => {
-            this.foto = new FotoComponent();
-            console.log('Cadastrado com sucesso!');
-
-        })
-        console.log(this.foto);
-    }*/
 }

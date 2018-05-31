@@ -10,5 +10,6 @@ export class AlunoComponent {
     nome: string;
     curso: string;
     id: string;
+    professor: string;
 
 }

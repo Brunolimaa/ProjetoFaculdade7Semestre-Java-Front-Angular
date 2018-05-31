@@ -9,20 +9,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var cadastro_component_1 = require('./cadastro.component');
-var cadastro_service_1 = require('./cadastro.service');
-var CadastroModule = (function () {
-    function CadastroModule() {
+var professor_component_1 = require('./professor.component');
+var ProfessorModule = (function () {
+    function ProfessorModule() {
     }
-    CadastroModule = __decorate([
+    ProfessorModule = __decorate([
         core_1.NgModule({
-            declarations: [cadastro_component_1.CadastroComponent],
-            exports: [cadastro_component_1.CadastroComponent],
-            providers: [cadastro_service_1.CadastroService]
+            exports: [professor_component_1.ProfessorComponent],
+            declarations: [professor_component_1.ProfessorComponent]
         }), 
         __metadata('design:paramtypes', [])
-    ], CadastroModule);
-    return CadastroModule;
+    ], ProfessorModule);
+    return ProfessorModule;
 }());
-exports.CadastroModule = CadastroModule;
-//# sourceMappingURL=cadastro.module.js.map
+exports.ProfessorModule = ProfessorModule;
+//# sourceMappingURL=professor.module.js.map

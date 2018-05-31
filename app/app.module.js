@@ -16,14 +16,18 @@ var cadastro_component_1 = require('./cadastro/cadastro.component');
 var app_routes_1 = require('./app.routes');
 var forms_1 = require('@angular/forms');
 var aluno_component_1 = require('./aluno/aluno.component');
+var professor_component_1 = require('./professor/professor.component');
+var cadastro_service_1 = require('./cadastro/cadastro.service');
+var professor_service_1 = require('./professor/professor.service');
 var AppModule = (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         core_1.NgModule({
             imports: [platform_browser_1.BrowserModule, http_1.HttpModule, app_routes_1.routing, forms_1.FormsModule],
-            declarations: [app_component_1.AppComponent, cadastro_component_1.CadastroComponent, aluno_component_1.AlunoComponent],
-            bootstrap: [app_component_1.AppComponent]
+            declarations: [app_component_1.AppComponent, cadastro_component_1.CadastroComponent, aluno_component_1.AlunoComponent, professor_component_1.ProfessorComponent],
+            bootstrap: [app_component_1.AppComponent],
+            providers: [cadastro_service_1.CadastroService, professor_service_1.ProfessorService]
         }), 
         __metadata('design:paramtypes', [])
     ], AppModule);
